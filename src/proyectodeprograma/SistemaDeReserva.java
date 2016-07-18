@@ -3,10 +3,23 @@ package proyectodeprograma;
 
 import java.util.Arrays;
 import java.util.Scanner;
-
+/**
+ * La clase "SisteDeReserva" fue creada para emitar el sistema de reserva de las salas
+ * de computo de la UTPL.
+ * Esta clase tiene métodos los cuales fueron creados para realizar ciertas tareas específicas 
+ * como visualizar salas, registrar equipo, entre otros.
+ * -Utiliza una clase 'Utilidades', la cual tiene dos métodos  get`s státicos: uno sirve
+ * para leer enteros[Utilidades.leerInt()] y otra que sirve para leer datos del
+ * tipo cadenas[Utilidades.leerString()].
+ * @author Anthony Ortiz Ramón.
+ * @author José Romero.
+ * @author Jenny Pereira.
+ * @author Hamilton Ramirez.
+ */
 public class SistemaDeReserva {
   Login acceso = new Login();
   private  boolean salir;
+  //Strings arreglos parar reprsentar las salas de cómputo.
   private  String salaA[]={"X","X","X","X","X","X"};
   private  String salaB[]={"X","X","X","X","X","X"};
   private  String salaC[]={"X","X","X","X","X","X"};
