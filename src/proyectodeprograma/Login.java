@@ -1,6 +1,18 @@
 
 package proyectodeprograma;
 
+/**
+ * Esta clase fue creada para poder iniciar sesión en un 'objeto sistema'. 
+ * La principal funcionalidad de esta clase es la de solicitar datos al usuario y 
+ * verificar los mediante métodos ya definidos en él. 
+ * -Utiliza una clase 'Utilidades', la cual tiene dos métodos get`s státicos: uno sirve
+ * para leer enteros[Utilidades.leerInt()] y otra que sirve para leer datos del
+ * tipo cadenas[Utilidades.leerString()].
+ * @author Anthony Ortiz Ramón.
+ * @author José Romero.
+ * @author Jenny Pereira.
+ * @author Hamilton Ramirez.
+ */
 public class Login {
         String[] usuario={"a","b","c"};
         String pass[]={"a12","b12","c12"};
