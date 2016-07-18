@@ -330,5 +330,26 @@ public class SistemaDeReserva {
         }
         return disponibilidad;
     }
-                                                          
+                                                       
+    public boolean isHaySalasDisponibles(){
+        int n=0;
+        boolean disponibilidad=true;
+        if (isSalaDisponible(salaA)==false){
+            n+=1;
+        }
+        if (isSalaDisponible(salaB)==false){
+            n+=1;
+        }
+        if (isSalaDisponible(salaC)==false){
+            n+=1;
+        }
+        if (isSalaDisponible(salaD)==false){
+            n+=1;
+        } 
+        if (n==4) {
+            disponibilidad = false;
+        }
+        return disponibilidad;
+    }
+    
 }

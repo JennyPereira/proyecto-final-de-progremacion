@@ -14,53 +14,91 @@ package proyectodeprograma;
  * @author Hamilton Ramirez.
  */
 public class Login {
-        String[] usuario={"a","b","c"};
-        String pass[]={"a12","b12","c12"};
-        String nombres[]={"Anthony","Edisson","Fernando"};
-        String nombre;
-        boolean acceso;
-        /**
-         * Este metodo pide al usuario que ingrese los datos para logearse, en su
-         * interior recorre un 'FORD' para verificar el usuario y la contraseña que
-         * se encuentran en diferentes arreglos.
-         * @return una variable boolean 'acceso', si el usuario y la contraseña se 
-         * encuentran en los arreglos retorna un true caso contrario retorna false.
-         * Y si no existe los datos muestra un mensaje.
-         */
-        public boolean isTieneAcceso(){
-            String usuario,contraseña;
-            boolean acceso=false;
-            
-                while(acceso==false){
-                    System.out.print("Usuario: ");
+         //Atributos del usuario Administrador
+        String[] usuarioAdministrador={"admin1","admin2"};
+        String[] contraseniaAdministrador={"123","456"};
+        String[] nombreAdmin={"Margoth","Kaila"};
+        
+        //Atributos del usuario Estudiante.
+        String[] usuarioEstudiante={"a","b","c"};
+        String[] contraseniaEstudiante={"a12","b12","c12"};
+        String[] nombreEstudiante={"Anthony","Edisson","Fernando"};
+        
+        String nombre;//Atributo para utilizar el nombre del usuario que accedio al sistema.
+        boolean esAdmin;//Atributo para verificar si el usuario es Administrador o no.
+       
+       /**
+        * Método encargado de solicitar los datos al usuario y verificar los mediante los métodos
+        * isVerificacionUsuario() y isVerificacionContrasenia().
+        * @return accsesoConcedido boolean, si se cumple la primera condición obtienen el valor 
+        * de 'true' caso contrario se queda con su valor original 'false'.
+        */ 
+       public boolean isPeticionDatos(){
+           String usuario;
+           String contrasenia;
+           boolean accsesoConcedido = false;
+                    System.out.println("·························");//salto de línea.
+                    System.out.print  ("  Usuario: ");
                     usuario=Utilidades.leerString();
-                    System.out.print("Contraseña: ");
-                    contraseña=Utilidades.leerString();
-                        for (int i = 0; i < this.usuario.length; i++) {                    
-                            if (this.usuario[i].equals(usuario)&& pass[i].equals(contraseña)) {
-                                 System.out.println("Bienvenido "+nombres[i]);
-                                 nombre =nombres[i];
-                                 acceso=true;
-                                 break;
-                            }else if(this.usuario[i].equals(usuario) && !pass[i].equals(contraseña)){
-                                
-                                        System.out.println("La contraseña es incorrecta");
-                                         break;
-                           } else if (pass[i].equals(contraseña) && !this.usuario[i].equals(usuario)) {
-                                
-                                        System.out.println("El usuario es incorrecto"); 
-                                        break;                                                     
-                           }else if (i+1 == this.usuario.length){
-                               System.out.println("Los datos son incorrectos");
-                           }
-                       }
-                       
-                       
-                 }
-                
-            return acceso;
-        }
-        /**
-         * hola
-         */
+                    System.out.print  ("  Contraseña: ");
+                    contrasenia=Utilidades.leerString();
+                    System.out.println("·························");//salto de línea.
+                    if (isVerificacionUsuario(usuario)== true && isVerificacionContrasenia(contrasenia) == true) {
+                        accsesoConcedido = true;
+                        System.out.println("Bienvenido "+nombre);
+                    }else if(isVerificacionUsuario(usuario)== true && isVerificacionContrasenia(contrasenia) == false ){
+                        System.out.println("¡La contraseña es incorrecta!");
+                    }else if(isVerificacionContrasenia(contrasenia) == true && isVerificacionUsuario(usuario)== false){
+                        System.out.println("¡El usuario es incorrecto!");
+                    }else{
+                        System.out.println("Datos incorrectos, intente de nuevo"); 
+                    }
+            return accsesoConcedido;        
+       }
+       /**
+        * Este método se encarga de verificar el 'usuario' que se ingreso por teclado
+        * recorriendo cada arreglo con FOR's.
+        * @param usuario obtenido del dato ingresado en el Método isPeticionDatos().
+        * @return usuarioCorrecto boolean, si encontro el 'usuario' en algún Arreglo
+        * tendra el valor de true caso contrario 'false'.
+        */
+       public boolean isVerificacionUsuario(String usuario){
+           boolean usuarioCorrecto = false;
+           for (int i = 0; i < usuarioAdministrador.length && usuarioCorrecto == false; i++) {
+                if (usuarioAdministrador[i].equals(usuario)) {
+                    usuarioCorrecto = true;
+                    esAdmin = true;
+                    nombre = nombreAdmin[i];
+                }
+           }
+           for (int i = 0; i < usuarioEstudiante.length && usuarioCorrecto == false; i++) {
+               if (usuarioEstudiante[i].equals(usuario)) {
+                    usuarioCorrecto = true;
+                    esAdmin = false;
+                    nombre = nombreEstudiante[i];
+               }
+           }
+         return usuarioCorrecto;
+       }
+       /**
+        * Este método se encarga de verificar el 'contraseña' que se ingreso por teclado
+        * recorriendo cada arreglo con FOR's.
+        * @param contrasenia obtenido del dato ingresado en el Método isPeticionDatos().
+        * @return contraseniaCorrecta boolean, si encontro el 'usuario' en algún Arreglo
+        * tendra el valor de true caso contrario 'false'.
+        */
+       public boolean isVerificacionContrasenia(String contrasenia){
+           boolean contraseniaCorrecta = false;
+           for (int i = 0; i < contraseniaAdministrador.length && contraseniaCorrecta == false; i++) {
+                if (contraseniaAdministrador[i].equals(contrasenia)) {
+                    contraseniaCorrecta = true;
+                }
+           }
+           for (int i = 0; i < contraseniaEstudiante.length && contraseniaCorrecta == false; i++) {
+               if (contraseniaEstudiante[i].equals(contrasenia)) {
+                    contraseniaCorrecta = true;
+               }
+           }
+         return contraseniaCorrecta;
+       }
 }
