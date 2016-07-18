@@ -26,10 +26,6 @@ public class Utilidades {
         dato=dato.toLowerCase();
         return dato;
     }
-        /**
-     *  Método encargado de leer un dato de tipo entero.
-     * @return dato int.
-     */
     public static int leerInt(){
         Scanner teclado = new Scanner(System.in);
         int dato;
