@@ -10,17 +10,21 @@ package proyectodeprograma;
  */
 public class metodoPrincipal {
     public static void main(String[] args) {
-        SistemaDeReserva obj = new SistemaDeReserva();//objeto creado
-               
-        while(true){
-            obj.interfazAdministrador();
-            
-            while(obj.isHaySalasDisponibles()){
-                obj.interfazEstudiante();
-            }
-            
-        }//Fin while(true)
+        SistemaDeReserva objSistema = new SistemaDeReserva();//objeto creado
+       
         
+        while(true){                
+            //condición para verificar si tiene acceso al 'sistema'.
+            if (objSistema.isTieneAcceso() == true) {
+                               
+                if (objSistema.sesion.esAdmin) {//se verifica si es Administrador                
+                    objSistema.interfazAdministrador();                 
+                }else{                          //caso contrario se entendera que es un estudiante. 
+                    objSistema.interfazEstudiante();    
+                }
+                
+            }//Fin (objSistema.isTieneAcceso())
+                  
+        }//Fin while(true)
     }
-    
 }

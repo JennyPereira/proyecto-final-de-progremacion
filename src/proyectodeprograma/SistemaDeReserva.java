@@ -17,49 +17,76 @@ import java.util.Scanner;
  * @author Hamilton Ramirez.
  */
 public class SistemaDeReserva {
-  Login acceso = new Login();
-  private  boolean salir;
+     
+  Login sesion; //creación de un objeto Login.
+  
   //Strings arreglos parar reprsentar las salas de cómputo.
   private  String salaA[]={"X","X","X","X","X","X"};
   private  String salaB[]={"X","X","X","X","X","X"};
   private  String salaC[]={"X","X","X","X","X","X"};
   private  String salaD[]={"X","X","X","X","X","X"};
-    
-    //-----------------------------------ADMIN----------------------------------
+  
+  //Atributos que se utlizarán para que el estudiante pueda liberar la máquina.
+  private  boolean equipoRegistrado[]={false,false,false}; //Permitira ver si un estudiante tiene un equipo registrado.
+  private  int numeroEquipo[]={0,0,0};//Se utilizará para asignar a cada estudiante el equipo que eligió. 
+  private  String salaDelEstudiante[]={"-","-","-"};//Se utilizará para asignar a cada estudiante la sala que haya elegidó.
+  private  int contE;//Servira para identificar que estudiante quiera liberar el equipo que eligió.
+  private  boolean salir;//Este atributo sirvira para salir de la interfaz del estudiante o cuando  registro un eqipo disponible.
+     /**
+      * Constructor de la clase SistyemaDeReserva.
+      */   
+     public SistemaDeReserva(){
+         sesion  = new Login();
+     } 
+     /**
+      * Se encarga de ejecutar y verificar el método [isPeticionDatos()] del objeto,
+      * 'sesion' de la clase 'Login'.
+      * @return acceso boolean, obtiene el valor de 'true' si la condicion es verdadera,
+      * caso contrarios se queda con su valor original 'false'.
+      */
+     public boolean isTieneAcceso(){
+         boolean acceso = false;
+         if (sesion.isPeticionDatos() == true) {
+             acceso = true;
+         }
+         return acceso;
+     }  
+      
+    //-----------------------------------ADMINISTRADOR----------------------------------------
     /**
-     * Este metodo se encarga de mostrar un menu del administrador y de ejecutar
-     * las funciones del mismo.
+     * Este método se encarga de mostrar un menú del administrador y de ejecutar
+     * las opciones(métodos) del mismo.
      */
     public void interfazAdministrador(){
-            int opcion;
+            String opcion;
             boolean salir;
             
             do{
             salir=false;
-            System.out.println("                     UNIVERSIDAD TÉCNICA PARTICULAR DE LOJA");
-            System.out.println("    |=========================================|");
-            System.out.println("    |Opcion[1]: visualizar sala(s) de computo |");
-            System.out.println("    |Opción[2]: suspender equipo dañado(s)           |");
-            System.out.println("    |Opción[3]: habilitar sala(s)             |");
-            System.out.println("    |Opción[4]: deshabilitar sala(s)          |");
-            System.out.println("    |Opción[5]: permitir ingreso              |");
-            System.out.println("    |=========================================|");
+            System.out.println("           UNIVERSIDAD TÉCNICA PARTICULAR DE LOJA");
+            System.out.println("         |=========================================|");
+            System.out.println("         |Opción[1]: visualizar sala(s) de cómputo |");
+            System.out.println("         |Opción[2]: suspender equipo dañado       |");
+            System.out.println("         |Opción[3]: habilitar sala(s)             |");
+            System.out.println("         |Opción[4]: deshabilitar sala(s)          |");
+            System.out.println("         |Opción[5]: permitir ingreso              |");
+            System.out.println("         |=========================================|");
             System.out.print("Opción: ");
-            opcion=Utilidades.leerInt();
-            switch (opcion){
-                case 1: verDisponibilidadSalas(); visualizarSalas(); break;                     
-                case 2: suspenderEquipo(); break;
-                case 3: habilitarSalas();break;
-                case 4: desabilititarSalas();break;
-                case 5: salir = true;break;
-                default:System.out.println("¡Esta opción no existe!");
-            } 
+                              opcion=Utilidades.leerString();
+                      switch (opcion){
+                                     case "1": verDisponibilidadSalas(); visualizarSalas(); break;                     
+                                     case "2": suspenderEquipo(); break;
+                                     case "3": habilitarSala();break;
+                                     case "4": desabilititarSala();break;
+                                     case "5": salir = true;break;
+                                     default:System.out.println("¡Esta opción no existe!");
+                      }//Fin switch 
             }while(salir==false);
     }
     
     /**
-     * Este metodo se encarga de mostrar la disponibilidad de las salas con ayuda          
-     * de otro metodo(isSalaDisponible) que verifica si cada sala esta ocupada o no. 
+     * Este método se encarga de mostrar la disponibilidad de las salas con ayuda          
+     * de otro metodo[isSalaDisponible()] que verifica si cada sala esta ocupada o no. 
      */
     private void verDisponibilidadSalas(){
         System.out.println("-----------------------------------------------------");
@@ -88,10 +115,13 @@ public class SistemaDeReserva {
         }
         System.out.println("-----------------------------------------------------");
     }
-
     
     //Primera opción
-
+    /**
+     * Su funcionalidad es de solicitar al usuario que ingrese una sala para poder 
+     * mostrarla con la adyuda del método[mostrarSala()].
+     * -mostrarSala() se encuntra mas abajo de este método.
+     */
     private void visualizarSalas(){
             String sala;
             System.out.print("Ingrese la sala: ");
@@ -106,34 +136,37 @@ public class SistemaDeReserva {
             }
     }
     /** 
-     * @param sala(arreglo), este metodo que recibe una arreglo como parametro se encarga  
-     * de imprimir el mismo pero en forma de matriz.
+     * Su función principal es la de mostrar un arreglo en forma de matriz para que
+     * tenga la forma de una 'sala' de cómputo. 
+     * @param sala String(arreglo), obtenido del dato que el usuario ingreso en el 
+     * método visualizarSalas().
      */
     private void mostrarSala(String sala[]){
-            System.out.println("------------------");
-            System.out.print("   ");
+            System.out.println("              ------------------");
+            System.out.print("                  ");
             for (int i = 0; i < sala.length; i++) {                          
                 System.out.print("["+sala[i]+"] ");
                 if (i==2) {
                     System.out.println("");
-                    System.out.print("   ");
+                    System.out.print("                  ");
                 }             
             }
-            System.out.print("\n------------------\n");
+            System.out.print("\n              ------------------\n");
     }
     //FIN Primera opción
     
     //Segunda opción
     /**
-     * La funcionalidad de este metodo es de suspender un equipo daño, primero solicita
-     * la sala  donde quiere deshabilitar el equipo despues llama al metodo
-     * (setEquipoDañado() que se encunetra de bajo de este metodo).
+     * La funcionalidad de este método es de solicitar al usuario la sala en donde 
+     * se suspendera el equipo, después dependiendo de la sala que se indicó se llama
+     * al método[setEquipoDañado()].
+     * -setEquipoDañado() se encuentra de bajo de este método.
      */
     private void suspenderEquipo(){
             String sala,respuesta;
             System.out.println("--------------------------------------------");
             do{          
-                System.out.print("Ingrese la sala:");
+                System.out.print("Ingrese la sala: ");
                 sala=Utilidades.leerString();
                 switch(sala){
                     case "a": setEquipoDañado(salaA);break;
@@ -147,8 +180,10 @@ public class SistemaDeReserva {
             } while(respuesta.equals("si"));
    }
     /**
-     * @param sala(arreglo), su funcionalidad se centra en deshabilitar un equipo 
-     * que se encuentre dañado en la sala especificada como parametro.
+     * Se encarga de solicitar el equipo que el 'usuario' quiera suspender en la sala
+     * que se haya específicado en el método[suspender()].
+     * @param sala String(arreglo), obtenido de la 'sala' que el 'usuario' haya ingresado
+     * en el método[suspender()].
      */
     private void setEquipoDañado(String sala[]){
             Scanner teclado1 = new Scanner(System.in);
@@ -174,18 +209,23 @@ public class SistemaDeReserva {
     
     
     //Tercera opción 
-    private void habilitarSalas(){
+    /**
+     * Su funcionalidad es la de solicitar al usuario que ingrese una sala para 
+     * habilitarla, una ves que haya ingresado la sala, llama a un método[setSala()]
+     * para poder habilitar la sala que se haya indicado.
+     * -setSala() se encuentra abajo de este método.
+     */
+    private void habilitarSala(){
         String sala, respuesta;
         System.out.println("--------------------------------------------");
         do{
             System.out.print("Ingrese la sala: ");
             sala=Utilidades.leerString();
             switch(sala){
-                //habilitarSala() se encuentra mas abajo. 
-                case "a": habilitarSala(salaA);break;
-                case "b": habilitarSala(salaB);break;
-                case "c": habilitarSala(salaC);break;
-                case "d": habilitarSala(salaD);break;
+                case "a": setSala(salaA);break;
+                case "b": setSala(salaB);break;
+                case "c": setSala(salaC);break;
+                case "d": setSala(salaD);break;
                 default:System.out.println("¡Esta sala no existe!");
             }
             System.out.print("Desea habilitar otra sala(si/no): ");
@@ -193,11 +233,13 @@ public class SistemaDeReserva {
         }while(respuesta.equals("si"));
      } 
     /**
-     * @param sala(arreglo), al recibir este arreglo como parametro lo recorre y
-     * si el arreglo no tiene equipos dañados asigna el valor del contador de cada 
-     * posicion para indicar el numero del equipo.
+     * Este método se encarga de recorre un arreglo que es la sala que se indicó en el
+     * método[habilitarSala()] y asignarle un número de equipo a cada elemento del 
+     * arreglo(sala) con un FOR.
+     * @param sala String(arreglo), obtenino del dato que el 'usuario' haya indicado en 
+     * el método[habilitarSala()].   
      */
-    private void habilitarSala(String sala[]){
+    private void setSala(String sala[]){
         for (int i = 0; i < sala.length; i++) {
             if (!sala[i].equals("D")) {
                 sala[i]=Integer.toString(i+1);
@@ -208,10 +250,11 @@ public class SistemaDeReserva {
     
     //Cuarta opción
     /**
-     * La funcionalidad de este metodo permite llenar el arreglo con 'X', en la sala que 
-     * se indique(esto da entender que los equipos ya no etan disponibles).
+     * La funcionalidad de este método es la de solicitar una sala al 'usuario' para 
+     * deshabilitarla, después el método[fill()] llena el arreglo(sala) con el caracter ´X´
+     * en la sala que se haya indicadó(esto da entender que los equipos ya no estan disponibles).
      */
-    private void desabilititarSalas(){
+    private void desabilititarSala(){
         String sala, respuesta;        
         System.out.println("--------------------------------------------");
         do{
@@ -228,94 +271,169 @@ public class SistemaDeReserva {
             respuesta=Utilidades.leerString();
         }while(respuesta.equals("si"));        
     }
-    
     //FIN Cuarta opción
-    //-----------------------------------ADMIN----------------------------------
+    //-----------------------------------ADMIN--------------------------------------------
     
-    //----------------------------------ESTUDIANTE------------------------------
+    
+    //----------------------------------ESTUDIANTE---------------------------------------
     /**
-     * Su funcionalidad se encarga de mostrar el menu del estudiante y de ejecutar
-     * los metodos correspodientes a las opciones.
+     * Su funcionalidad se encarga de mostrar el menú del estudiante y de ejecutar
+     * las opciones(métodos) del mismo. Ademas ejecuta un método[isTieneEquiopoRegistrado()]
+     * el cual verifica si el estudiante que ingreso a la sesión tiene registrado un equipo
+     * si el método retorna 'false' entramos a la interfdaz, caso contrario libera el equipo 
+     * del estudiante.
+     * -isTieneEquiopoRegistrado() se encuntra a bajo de este método.
      */
     public void interfazEstudiante(){
-        Scanner teclado = new Scanner(System.in);
-        int opcion;  
-        if (acceso.isTieneAcceso()) {    
-            do{
-                 this.salir=false;
-                 System.out.println("|========================================|");
-                 System.out.println("|Opción[1]: visualizar sala(s) de computo|");
-                 System.out.println("|Opción[2]: registrar equipo             |");
-                 System.out.println("|Opción[3]: salir                        |");
-                 System.out.println("|========================================|");
-                 System.out.print("Opción: ");
-                 opcion = teclado.nextInt();
-                    switch(opcion){
-                        case 1: verDisponibilidadSalas(); visualizarSalas(); break;
-                        case 2: registrarEquipo();break;
-                        case 3: this.salir=true;break;
-                        default:System.out.println("¡Esta opción no existe!");
-                    }
-            }while(this.salir==false);
-      } 
-    }
+        String opcion;  
+        
+            if(isTieneEquiopoRegistrado() == false){
+                
+                do{
+                         this.salir=false;
+                         System.out.println("   |==========================================|");
+                         System.out.println("   |Opción[1]: ver disponibilidad de las salas|");
+                         System.out.println("   |Opción[2]: registrar equipo               |");
+                         System.out.println("   |Opción[3]: salir                          |");
+                         System.out.println("   |==========================================|");
+                         System.out.print("Opción: ");
+                        opcion = Utilidades.leerString();
+                             switch(opcion){
+                                 case "1": verDisponibilidadSalas(); break;
+                                 case "2": registrarEquipo();break;
+                                 case "3": this.salir=true;break;
+                                 default:System.out.println("¡Esta opción no existe!");
+                             }
+                }while(this.salir==false);
+            }else if(isTieneEquiopoRegistrado() == true){
+                
+                String sala = salaDelEstudiante[contE];//se asigna la sala del estudiante(contE).  
+                int eqipoRegistrado =  numeroEquipo[contE];//se asigna el equipo del estudiante(contE).
+                liberarEquipo(sala,eqipoRegistrado);//Este método se encuentra mas a bajo.   
+                
+                System.out.println("El equipo se a liberado");
+                equipoRegistrado[contE] = false;//El equio registrado el estudiante(contE) se pone  en 
+                                                //'false' para indicar que el estudiante 
+                                                //ya no tiene un equipo registrado.
+            }
+          
+    }    
+    /**
+     * Este método se encarga de verificar si un 'estudiante' tiene un equipo registrado.
+     * El método recorre un FOR para ver si el átributo'nombre' del estudiante que ingreso a la sesión
+     * coincide con uno del arreglo 'nombreEstudiante' y también verifica si no tiene equipo registrado.
+     * Para que este método tenga que ejecutarse correctamente, primero se debe ejecutar el método[isPeticionDatos()]
+     * del objeto 'sesion'.
+     * @return tieneEquipo boolean, obtiene el valor de 'true' si la primera condicion es verdadera, caso 
+     * contrario retorna su valor original 'false'.
+     */
+    private boolean isTieneEquiopoRegistrado(){
+            boolean tieneEquipo = true;
+            for (int i = 0; i < 3; i++) {
+                if ( sesion.nombre.equals(sesion.nombreEstudiante[i]) && equipoRegistrado[i]==false ) {
+                    tieneEquipo = false;
+                    contE=i;
+                   return tieneEquipo;
+                }else if (sesion.nombre.equals(sesion.nombreEstudiante[i]) && equipoRegistrado[i]==true){
+                    contE=i;
+                }   
+            }         
+         return tieneEquipo;
+     }
+    /**
+     * Su funcionalidad es la de liberar el equipo que el estudiante registro.
+     * Este método se ejecuta en el método[interfazEstudiante()]- despues de la condición 
+     * if(isTieneEquiopoRegistrado() == true). Dependiendo de la sala que el estudiante
+     * haya registrado el equipo, este método se encargara de liberarlo con los datos obtenidos
+     * en la condición if(isTieneEquiopoRegistrado() == true).
+     * @param sala String, obtenido en la condición del método [interfazEstudiante()].
+     * @param equipoRegistrado int, obtenido en la condición del método [interfazEstudiante()].
+     */
+    private void liberarEquipo(String sala, int equipoRegistrado){
+         switch (sala){
+             case "a": salaA[equipoRegistrado-1]=Integer.toString(equipoRegistrado);break;
+             case "b": salaB[equipoRegistrado-1]=Integer.toString(equipoRegistrado);break;
+             case "c": salaC[equipoRegistrado-1]=Integer.toString(equipoRegistrado);break;
+             case "d": salaD[equipoRegistrado-1]=Integer.toString(equipoRegistrado);break;
+         }
+     }
+    
     //Segunda opción estudainte
+    /**
+     * Su principal función es la de registrar un equipo en una salsa de cómputo.
+     * Este método solicita al 'estudiante' la sala donde quiera registrar el equipo
+     * que desea ocupar. Depués llama al método[setEquipo()].
+     * -setEquipo() se encuntra más a bajo de este método.
+     */
     public void registrarEquipo(){
         String sala;
         System.out.println("--------------------------------------------");
             System.out.print("Ingrese la sala: "); 
             sala=Utilidades.leerString();
+            salaDelEstudiante[contE]=sala;
             switch(sala){
                 //El metodo setRegistroEn() se encuentra mas abajo.
-                case "a": setRegistroEn(salaA);break;
-                case "b": setRegistroEn(salaB);break;
-                case "c": setRegistroEn(salaC);break;
-                case "d": setRegistroEn(salaD);break;
+                case "a": setEquipo(salaA);break;
+                case "b": setEquipo(salaB);break;
+                case "c": setEquipo(salaC);break;
+                case "d": setEquipo(salaD);break;
                 default:System.out.println("¡Esta sala no existe!");            
             }
     }
     /**
-     * Este metodo se encarga de solicitar y registrar un equipo. 
-     * @param sala(arreglo), al recibir este parametro lo recorre y verifica si 
-     * el equipo que ingreso esta disponible, si el equipo que ingreso esta disponible
-     * se registra en el arreglo indicado por el estudiante.
+     * Este método se encarga de solicitar y registrar un equipo. 
+     * Solicita al estudiante que ingrese el equipo que desea ocupar, una ves ingresado el dato 
+     * el método se encaga de actualizar al arreglo(sala) con '0' para dar a entender que ese equipo
+     * ya esta ocupado.
+     * @param sala String(arreglo), obtenido del método[registrarEquipo()].
      */
-    private void setRegistroEn(String sala[]){
+    private void setEquipo(String sala[]){
         int equipo;
         String respuesta;
         boolean salir;
-        mostrarSala(sala);
-        System.out.print("Ingrese el equipo: ");
-        equipo=Utilidades.leerInt();
-        System.out.print("Confirmar(si/no): ");
-        respuesta=Utilidades.leerString();                                                                        
-        if (respuesta.equals("si")) {       
-            for (int i = 0; i < sala.length; i++) {
-                if (sala[equipo-1].equals(Integer.toString(equipo))) {
-                     sala[equipo-1]="0";
-                     this.salir=true;
-                     mostrarSala(sala);
-                     System.out.println(acceso.nombre+" Máquina ["+ equipo+"]"+" reservada");
-                     break;
-                }else {
-                    if(sala[i].equals("X")||sala[i].equals("0")){
-                            System.out.println("¡Este equipo no esta disponible!");
-                            break;
-                    }else{                        
-                            System.out.println("¡Este equipo esta dañado!");
-                            break;
-                        
-                    }                 
-                }
-            }
-        }
+        if(isSalaDisponible(sala)){
+            mostrarSala(sala);
+            System.out.print("Ingrese el equipo: ");
+            equipo=Utilidades.leerInt();
+                                                                              
+                        if (sala[equipo-1].equals(Integer.toString(equipo))) {
+                            System.out.print("Confirmar(si/no): ");
+                            respuesta=Utilidades.leerString();    
+                            if (respuesta.equals("si")) {  
+                             sala[equipo-1]="0";
+                             this.salir=true;
+                             mostrarSala(sala);
+                             System.out.println(sesion.nombre+" Máquina ["+ equipo+"]"+" reservada");
+                             //Actualización de los atributos para que el estudiante pueda liberar el equipo.
+                             numeroEquipo[contE] = equipo;//se asigna el equipo ingrersado con el 
+                                                          //estudiante específicado(contE).
+                             equipoRegistrado[contE] = true;//se asigna valor 'true' para indicar que el estudiante
+                                                            //ya tiene un equipo registrado.
+                            }
+                         }else {
+                                if(sala[equipo-1].equals("0")){
+                                    System.out.println("¡Este equipo no esta disponible!");                                  
+                                }else if(sala[equipo-1].equals("D")) {                        
+                                    System.out.println("¡Este equipo esta dañado!");
+                                 }                 
+                        }
+       
+       } else{
+            System.out.println("¡Esta sala no esta dispopnible!");    
+       }
     }        
-    //FIN Segunda opción estudainte
-    //----------------------------------ESTUDIANTE------------------------------
+    //FIN Segunda opción estudainte    
+    //----------------------------------ESTUDIANTE------------------------------   
+     
     /**
-     * Este metodo se encarga de verificar la disponibilidad de una sala.
-     * @param sala, al momento de 
-     * @return 
+     * Este método se encarga de verificar la disponibilidad de una sala.
+     * Recorre un arreglo(sala) el cual verifica cada elemento.Si la primera
+     * condición cumple para todos los elementos se entendera que el arreglo(sala)
+     * esta ocupada.
+     * @param sala String(arreglo), obtenido  de algunos métodos conmo [verDisponibilidadSalas()]
+     * y setEquipo().
+     * @return disponibilidad boolean, obtiene el valor de 'false' si la primera condición se cumple
+     * para cada elemento del arreglo(sala) caso contrario tendar su valor de origen 'true'.
      */
     private boolean isSalaDisponible(String sala[]){
         boolean disponibilidad=true;
@@ -330,26 +448,4 @@ public class SistemaDeReserva {
         }
         return disponibilidad;
     }
-                                                       
-    public boolean isHaySalasDisponibles(){
-        int n=0;
-        boolean disponibilidad=true;
-        if (isSalaDisponible(salaA)==false){
-            n+=1;
-        }
-        if (isSalaDisponible(salaB)==false){
-            n+=1;
-        }
-        if (isSalaDisponible(salaC)==false){
-            n+=1;
-        }
-        if (isSalaDisponible(salaD)==false){
-            n+=1;
-        } 
-        if (n==4) {
-            disponibilidad = false;
-        }
-        return disponibilidad;
-    }
-    
 }
